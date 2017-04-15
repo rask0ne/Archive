@@ -17,6 +17,13 @@ import javax.persistence.*;
         public UsersEntity() {
         }
 
+        public UsersEntity(int id, String username, String password, int role){
+            this.setId(id);
+            this.setUsername(username);
+            this.setPassword(password);
+            this.setRole(role);
+        }
+
         @Id
         @Column(name = "Id", nullable = false)
         public int getId() {
