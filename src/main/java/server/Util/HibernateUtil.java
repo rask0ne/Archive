@@ -12,8 +12,8 @@ public class HibernateUtil {
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             // loads configuration and mappings
-            Configuration configuration = new Configuration().addFile("C:\\Users\\rask\\IdeaProjects\\Catalog\\src\\main\\resources\\hibernate.cfg.xml")
-                    .addFile("C:\\Users\\rask\\IdeaProjects\\Catalog\\src\\main\\resources\\models\\UsersEntity.hbm.xml").configure();
+            Configuration configuration = new Configuration().addFile("C:\\Users\\rask\\IdeaProjects\\Archive\\src\\main\\resources\\hibernate.cfg.xml")
+                    .addFile("C:\\Users\\rask\\IdeaProjects\\Archive\\src\\main\\resources\\models\\UsersEntity.hbm.xml").configure();
             ServiceRegistry serviceRegistry
                     = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();

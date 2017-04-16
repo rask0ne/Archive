@@ -42,9 +42,22 @@ public class LoginController {
 
         String password = new md5Crypt().md5Apache(txtPassword.getText());
         user.setPassword(password);
+        user.setAction("Login");
         Client client = new Client();
         client.sendToServer(user);
-
+        Object o = client.getFromServer();
+        if(o instanceof String){
+            String str = (String)client.getFromServer();
+            if(str.equals("Loggined Successfully")){
+                ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+                Parent parent = FXMLLoader.load(getClass().getResource("Archive.fxml"));
+                Stage stage = new Stage();
+                Scene scene = new Scene(parent);
+                stage.setScene(scene);
+                stage.setTitle("Archive");
+                stage.show();
+            }
+        }
 
         lblMessage.setText("Wrong username or password!");
         lblMessage.setStyle("-fx-color: red");
@@ -60,7 +73,7 @@ public class LoginController {
         Stage stage = new Stage();
         Scene scene = new Scene(parent);
         stage.setScene(scene);
-        stage.setTitle("Catalog");
+        stage.setTitle("Archive");
         stage.show();
 
     }

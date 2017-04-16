@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.design.RegisterController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.design.RegisterController">
     <children>
         <PasswordField fx:id="txtPassword" layoutX="173.0" layoutY="239.0" onAction="#passwordTextButtonAction" prefHeight="31.0" prefWidth="254.0" promptText="Your Password" />
         <TextField fx:id="txtUsername" layoutX="173.0" layoutY="169.0" onAction="#usernameTextButtonAction" prefHeight="31.0" prefWidth="254.0" promptText="Your Username" />
@@ -16,6 +16,6 @@
             <Font size="16.0" />
          </font>
         </Label>
-        <Button fx:id="btnRegister" layoutX="263.0" layoutY="306.0" mnemonicParsing="false" onAction="#registerButtonAction" text="Register" />
+        <Button fx:id="btnRegister" layoutX="263.0" layoutY="306.0" mnemonicParsing="false" onAction="#registerButtonAction" text="Next" />
     </children>
 </AnchorPane>

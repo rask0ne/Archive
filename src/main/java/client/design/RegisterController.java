@@ -1,5 +1,7 @@
 package client.design;
 
+import client.Client;
+import client.models.User;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import client.crypt.md5Crypt;
@@ -54,53 +56,25 @@ public class RegisterController implements Initializable {
 
         password = new md5Crypt().md5Apache(password);
 
-        Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/catalogdb", "root", "root");;
-        Statement stmt = (Statement) con.createStatement();
-        query = "SELECT Username FROM users;";
-        stmt.executeQuery(query);
-        ResultSet rs = stmt.getResultSet();
+        User user = new User(txtUsername.getText(), password, 2);
+        user.setAction("Check if registered");
+        Client client = new Client();
+        client.sendToServer(user);
 
-        while(rs.next()){
-           String DBusername = rs.getString("Username");
-            if(username.equals(DBusername))    {
+        Object o = client.getFromServer();
+        if(o instanceof String){
+            String str = (String)o;
+            if(str.equals("Registered Successfully")){
+                ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
 
-                check = false;
-                lblMessage.setText("This username already exists!");
-                break;
-
+                Parent parent = FXMLLoader.load(getClass().getResource("Profile.fxml"));
+                Stage stage = new Stage();
+                Scene scene = new Scene(parent);
+                stage.setScene(scene);
+                stage.setTitle("Profile");
+                stage.show();
             }
-        }
-
-        if(check == true){
-
-            UsersEntity user = new UsersEntity(username, password, 2);
-
-            SessionFactory sessionFactory = server.Util.HibernateUtil.getSessionFactory();
-            Session session = sessionFactory.openSession();
-            session.beginTransaction();
-
-            user.setUsername(username);
-            user.setPassword(password);
-            user.setRole(2);
-
-            //Save the employee in database
-            session.save(user);
-
-            //Commit the transaction
-            session.getTransaction().commit();
-            session.close();
-
-            user = null;
-
-            ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
-
-            Parent parent = FXMLLoader.load(getClass().getResource("Login.fxml"));
-            Stage stage = new Stage();
-            Scene scene = new Scene(parent);
-            stage.setScene(scene);
-            stage.setTitle("Login");
-            stage.show();
-
+            lblMessage.setText("This username already exists!");
         }
 
     }
