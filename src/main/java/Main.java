@@ -1,50 +1,20 @@
-import org.hibernate.HibernateException;
-import org.hibernate.Metamodel;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-
-import javax.persistence.metamodel.EntityType;
-
-import java.util.Map;
+import design.Login;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import models.Server;
 
 /**
- * Created by rask on 15.04.2017.
+ * Created by rask on 16.04.2017.
  */
-public class Main {
-    private static final SessionFactory ourSessionFactory;
+public class Main{
 
-    static {
-        try {
-            Configuration configuration = new Configuration();
-            configuration.configure();
+      public static void main(String[] args) throws Exception {
 
-            ourSessionFactory = configuration.buildSessionFactory();
-        } catch (Throwable ex) {
-            throw new ExceptionInInitializerError(ex);
-        }
+          Server server = new Server();
+          new Thread(server).start();
     }
 
-    public static Session getSession() throws HibernateException {
-        return ourSessionFactory.openSession();
-    }
-
-    public static void main(final String[] args) throws Exception {
-        final Session session = getSession();
-        try {
-            System.out.println("querying all the managed entities...");
-            final Metamodel metamodel = session.getSessionFactory().getMetamodel();
-            for (EntityType<?> entityType : metamodel.getEntities()) {
-                final String entityName = entityType.getName();
-                final Query query = session.createQuery("from " + entityName);
-                System.out.println("executing: " + query.getQueryString());
-                for (Object o : query.list()) {
-                    System.out.println("  " + o);
-                }
-            }
-        } finally {
-            session.close();
-        }
-    }
 }

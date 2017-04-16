@@ -17,5 +17,6 @@
         <property name="role">
             <column name="Role" sql-type="int(11)"/>
         </property>
+
     </class>
 </hibernate-mapping>
