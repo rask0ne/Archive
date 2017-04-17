@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static XMLDAO.XMLConstants.XMLPARSERCONST.XMLBEGIN;
 import static XMLDAO.XMLConstants.XMLPARSERCONST.XMLEND;
@@ -163,6 +164,44 @@ public class XMLEditor {
      */
     public Person get(int index){
         return parser.parseFromXML(path, index);
+    }
+
+    /**
+     * getting arrayList from XML file
+     * @return arrayList of all Users in XML file
+     */
+    public ArrayList<Person> getList(){
+        ArrayList<Person> list = new ArrayList<Person>();
+        Person person;
+        int index = 0;
+        do {
+            person = parser.parseFromXML(path,index++);
+            if (person != null) {
+                list.add(person);
+            }
+        } while (person != null);
+        return list;
+    }
+
+    /**
+     * find in the XML file user with this name
+     * @param name the name for find
+     * @return the index of founded User
+     *    -1 - if user can't founded in XML file
+     */
+    public int findIndexAsName(String name){
+        Person person;
+        int index = 0;
+        do {
+            person = parser.parseFromXML(path,index);
+            if (person != null){
+                if (person.getName().equals(name)){
+                    return index;
+                }
+            }
+            index++;
+        }while (person != null);
+        return -1;
     }
 
     /**

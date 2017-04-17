@@ -11,6 +11,7 @@ public class User implements Serializable{
     private String password;
     private String role;
     private String action;
+    private String userProfile;
 
     public User(String login, String password, String role){
         this.setLogin(login);
@@ -19,6 +20,14 @@ public class User implements Serializable{
     }
 
     public User(){}
+
+    public String getUserProfile(){
+        return this.userProfile;
+    }
+
+    public void setUserProfile(String userProfile){
+        this.userProfile = userProfile;
+    }
 
     public String getRole(){
         return this.role;

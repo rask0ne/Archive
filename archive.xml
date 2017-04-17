@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class>
+  <user name="kek">
+    <FIO>
+      <firstname>gfdgdg</firstname>
+      <lastname>fgdgfd</lastname>
+    </FIO>
+    <contact>
+      <telephonenumber>+231231</telephonenumber>
+      <mail>fdgfgd@gmail.com</mail>
+    </contact>
+    <work>
+      <workplace>12313</workplace>
+      <experience>2</experience>
+    </work>
+  </user>
+  <user name="hello">
+    <FIO>
+      <firstname>fsdfdsf</firstname>
+      <lastname>sdfsdf</lastname>
+    </FIO>
+    <contact>
+      <telephonenumber>+3643234</telephonenumber>
+      <mail>dsf@gmail.com</mail>
+    </contact>
+    <work>
+      <workplace>fdsf</workplace>
+      <experience>1</experience>
+    </work>
+  </user>
+  <user name="world">
+    <FIO>
+      <firstname>sfsdf</firstname>
+      <lastname>dsfs</lastname>
+    </FIO>
+    <contact>
+      <telephonenumber>+231312</telephonenumber>
+      <mail>unddsf@gmail.com</mail>
+    </contact>
+    <work>
+      <workplace>fdsfsf</workplace>
+      <experience>1</experience>
+    </work>
+  </user>
+</class>

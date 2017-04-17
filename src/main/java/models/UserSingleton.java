@@ -11,6 +11,7 @@ public class UserSingleton {
     private String password;
     private String role;
     private String action;
+    private String profile = "";
 
     public UserSingleton(String login, String password, String role){
         this.setLogin(login);
@@ -27,6 +28,14 @@ public class UserSingleton {
 
         }
         return instance;
+    }
+
+    public String getProfile(){
+        return this.profile;
+    }
+
+    public void setProfile(String profile){
+        this.profile = profile;
     }
 
     public String getRole(){

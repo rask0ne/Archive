@@ -10,6 +10,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -82,12 +84,13 @@ public class XMLDOMParser implements Parserable {
                 return null;
             }
             Node nNode = nList.item(index);
+            Element user = (Element) nNode;
             NodeList fioList = doc.getElementsByTagName("FIO");
             Node fioNode = fioList.item(index);
             if (fioNode.getNodeType() == Node.ELEMENT_NODE) {
                 firstName = getXMLArgument(fioNode, "firstname");
                 lastName = getXMLArgument(fioNode, "lastname");
-                fatherName = getXMLArgument(fioNode, "fathername");
+               // fatherName = getXMLArgument(fioNode, "fathername");
             }
             NodeList contactList = doc.getElementsByTagName("contact");
             Node contactNode = contactList.item(index);
@@ -101,7 +104,8 @@ public class XMLDOMParser implements Parserable {
                 workPlace = getXMLArgument(workNode, "workplace");
                 workExperience = Integer.valueOf(getXMLArgument(nNode, "experience"));
             }
-            return new Person(firstName, lastName, fatherName, telephoneNumber, mail, workPlace, workExperience);
+            System.out.println(nNode.getAttributes().getNamedItem("name").getLocalName());
+            return new Person(((Element) nNode).getAttribute("name"),firstName, lastName/*, fatherName*/, telephoneNumber, mail, workPlace, workExperience);
         }catch (Exception e){
             e.printStackTrace();
             return null;

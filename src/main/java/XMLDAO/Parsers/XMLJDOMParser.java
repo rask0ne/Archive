@@ -74,7 +74,7 @@ public class XMLJDOMParser implements Parserable {
 
             firstName = FIO.getChild("firstname").getText();
             lastName = FIO.getChild("lastname").getText();
-            fatherName = FIO.getChild("fathername").getText();
+            //fatherName = FIO.getChild("fathername").getText();
 
             Element contact = user.getChild("contact");
 
@@ -86,7 +86,7 @@ public class XMLJDOMParser implements Parserable {
             workPlace = work.getChild("workplace").getText();
             workExperience = Integer.valueOf(work.getChild("experience").getText());
 
-            return new Person(firstName,lastName,fatherName,telephoneNumber,mail,workPlace,workExperience);
+            return new Person(user.getAttribute("name").getValue(),firstName,lastName/*,fatherName*/,telephoneNumber,mail,workPlace,workExperience);
         }catch(JDOMException e){
             e.printStackTrace();
         }catch(IOException ioe){

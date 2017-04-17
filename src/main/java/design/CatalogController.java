@@ -1,6 +1,7 @@
 package design;
 
 
+import XMLDAO.Person;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import repositories.XMLRepository;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 /**
@@ -67,11 +69,16 @@ public class CatalogController {
      * @throws ClassNotFoundException
      */
     @FXML
-    public void initialize() throws SQLException, ClassNotFoundException {
+    public void initialize() throws SQLException, ClassNotFoundException, IOException {
 
         lblTextMessage.setText(UserSingleton.getInstance().getLogin());
 
-        //updateTableView();
+        User user = new User(UserSingleton.getInstance().getLogin(), "", "");
+        user.setAction("Get Profiles");
+        Client client = new Client();
+        ArrayList<Person> list = (ArrayList<Person>)client.sendToServer(user);
+
+        updateTableView(list);
 
     }
 
@@ -106,39 +113,7 @@ public class CatalogController {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-   /* public void deleteActionButton(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
 
-        FileRepository file = (FileRepository) tableView.getSelectionModel().getSelectedItem();
-
-        logger.info("Selected file to delete");
-
-        if(file.getUsername().equals(UserRepository.getInstance().getName())
-                || UserRepository.getInstance().getName().equals("admin")) {
-
-            Connection con = (Connection) DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/catalogdb?autoReconnect=true&useSSL=false", "root", "root");
-
-            logger.info("Connection to DB established");
-
-            String query = "delete from files where filename = ? and username = ?";
-            PreparedStatement pstmt = (PreparedStatement) con.prepareStatement(query);
-            pstmt.setString(1, file.getFileName());
-            pstmt.setString(2, file.getUsername());
-            pstmt.execute();
-            pstmt = (PreparedStatement) con.prepareStatement("alter table files auto_increment = 1");
-            pstmt.execute();
-
-            logger.info("File deleted from DB");
-
-            con.close();
-
-            logger.info("Connection to DB closed");
-
-            updateTableView();
-
-        }
-
-    }*/
 
     /**
      * Method to refresh data in table after some manipulations with files database. Works
@@ -146,24 +121,26 @@ public class CatalogController {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public void updateTableView() throws SQLException, ClassNotFoundException {
+    public void updateTableView(ArrayList<Person> list) throws SQLException, ClassNotFoundException {
 
 
        // FileDataAccessor dataAccessor = new FileDataAccessor("jdbc:mysql://localhost:3306/catalogdb?useSSL=false", "root", "root"); // provide driverName, dbURL, user, password...
+        ArrayList<XMLRepository> username = new ArrayList<>();
+        for(int i = 0; i < list.size(); i++){
+            username.add(new XMLRepository(list.get(i).getName()));
+            System.out.println(list.get(i).getName());
+        }
 
-        TableView<XMLRepository> personTable = new TableView<>();
-        TableColumn<XMLRepository, String> firstNameCol = new TableColumn<>("Profile");
-        firstNameCol.setCellValueFactory(new PropertyValueFactory<XMLRepository, String>("xmlName"));
-        TableColumn<XMLRepository, String> usernameCol = new TableColumn<>("User");
+        TableColumn<XMLRepository, String> usernameCol = new TableColumn<>("User Profile");
         usernameCol.setCellValueFactory(new PropertyValueFactory<XMLRepository, String>("username"));
 
 
         tableView.getItems().clear();
         if(tableView.getColumns().isEmpty())
-            tableView.getColumns().addAll(firstNameCol, usernameCol);
+            tableView.getColumns().addAll(usernameCol);
 
 
-        //tableView.getItems().addAll(dataAccessor.getFileList());
+        tableView.getItems().addAll(username);
 
         logger.info("TableView updated");
 
@@ -294,7 +271,59 @@ public class CatalogController {
 
     }
 
-    public void showProfileButton(ActionEvent actionEvent) {
+    public void showProfileButton(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+
+        XMLRepository xml = (XMLRepository) tableView.getSelectionModel().getSelectedItem();
+
+        User user = new User(UserSingleton.getInstance().getLogin(), "", "");
+        user.setAction("Show user profile");
+        user.setUserProfile(xml.getUsername());
+
+        Client client = new Client();
+        Person profile =  (Person)client.sendToServer(user);
+        UserSingleton.getInstance().setProfile(profile.toString());
+
+        Parent parent = FXMLLoader.load(getClass().getResource("ShowProfile.fxml"));
+        Stage stage = new Stage();
+        Scene scene = new Scene(parent);
+        stage.setScene(scene);
+        stage.setTitle("Profile");
+        stage.show();
+
+    }
+
+
+    public void changeProfileAction(ActionEvent actionEvent) throws IOException, ClassNotFoundException, SQLException {
+
+        XMLRepository xml = (XMLRepository) tableView.getSelectionModel().getSelectedItem();
+
+        User user = new User(UserSingleton.getInstance().getLogin(), "", "");
+        user.setAction("Change user profile");
+        user.setUserProfile(xml.getUsername());
+        UserSingleton.getInstance().setProfile(xml.getUsername());
+
+        Client client = new Client();
+        String str =  (String)client.sendToServer(user);
+
+        if(str.equals("You have rights")) {
+
+            System.out.println("Ok");
+            Parent parent = FXMLLoader.load(getClass().getResource("Profile.fxml"));
+            Stage stage = new Stage();
+            Scene scene = new Scene(parent);
+            stage.setScene(scene);
+            stage.setTitle("Profile");
+            stage.show();
+        }
+        /*while(true){
+            if(UserSingleton.getInstance().getProfile().equals(""))
+                break;
+        }*/
+
+    }
+
+
+    public void deleteProfileAction(ActionEvent actionEvent) {
     }
 }
 

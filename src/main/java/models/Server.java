@@ -98,8 +98,15 @@ public class Server implements Runnable{
 
     private String actionForPerson(Person person) {
 
-        xmlEditor.addInEnd(person);
-        return "Profile created successfully";
+        int index = xmlEditor.findIndexAsName(person.getName());
+        if(index != -1){
+            xmlEditor.edit(person, index);
+            return "profile edited";
+        }
+        else {
+            xmlEditor.addInEnd(person);
+            return "Profile created successfully";
+        }
 
     }
 
@@ -348,6 +355,34 @@ public class Server implements Runnable{
 
             return access.getFileList();
         }
+        if(user.getAction().equals("Get Profiles")){
+            return xmlEditor.getList();
+        }
+        if(user.getAction().equals("Show user profile")){
+
+            return xmlEditor.get(xmlEditor.findIndexAsName(user.getUserProfile()));
+        }
+        if(user.getAction().equals("Change user profile")) {
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
+            stmt = (Statement) con.createStatement();
+            String query = "SELECT Username, Role FROM users;";
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()) {
+
+                String dbUsername = rs.getString("username");
+                String dbRole = rs.getString("role");
+
+                if (user.getLogin().equals(user.getUserProfile()) || (user.getLogin().equals(dbUsername)
+                        && dbRole.equals("admin"))) {
+
+                    String message = "You have rights";
+                    return message;
+                }
+            }
+            return "you dont have rights";
+        }
+
         return null;
     }
 

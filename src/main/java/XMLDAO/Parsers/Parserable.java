@@ -2,6 +2,8 @@ package XMLDAO.Parsers;
 
 import XMLDAO.Person;
 
+import java.util.List;
+
 /**
  * Created by Alexey on 15.04.2017.
  * The Interface of Parser. Using in XMLEditor
@@ -21,4 +23,5 @@ public interface Parserable {
      * @return the user with @param index
      */
     Person parseFromXML(String path, int index);
+
 }

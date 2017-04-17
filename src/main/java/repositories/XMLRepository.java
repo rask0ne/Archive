@@ -8,17 +8,6 @@ import javafx.beans.property.StringProperty;
  */
 public class XMLRepository {
 
-    private final StringProperty xmlName = new SimpleStringProperty(this, "fileName");
-    public StringProperty xmlNameProperty() {
-        return xmlName ;
-    }
-    public final String getFileName() {
-        return xmlNameProperty().get();
-    }
-    public final void setXmlName(String fileName) {
-        xmlNameProperty().set(fileName);
-    }
-
     private final StringProperty username = new SimpleStringProperty(this, "username");
     public StringProperty usernameProperty() {
         return username ;
@@ -32,8 +21,7 @@ public class XMLRepository {
 
     public XMLRepository() {}
 
-    public XMLRepository(String fileName, String username) {
-        setXmlName(fileName);
+    public XMLRepository(String username) {
         setUsername(username);
     }
 

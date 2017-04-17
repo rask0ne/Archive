@@ -63,9 +63,10 @@ class UserHandler extends DefaultHandler {
 
     protected LinkedList <Person> people = new LinkedList<Person>();
 
+    String name = null;
     String FirstName = null;
     String LastName = null;
-    String FatherName = null;
+    //String FatherName = null;
     String TelephoneNumber = null;
     String Email = null;
     String Workplace = null;
@@ -73,7 +74,7 @@ class UserHandler extends DefaultHandler {
 
     boolean bFirstName = false;
     boolean bLastName = false;
-    boolean bFatherName = false;
+    //boolean bFatherName = false;
     boolean bTelephoneNumber = false;
     boolean bEmail = false;
     boolean bWorkplace = false;
@@ -89,6 +90,7 @@ class UserHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         System.out.println("start checking - " + qName);
         if (qName.equalsIgnoreCase("user")) {
+            name = attributes.getValue("name");
         } else if (qName.equalsIgnoreCase("FIO")) {
             bFIO = true;
         } else if (qName.equalsIgnoreCase("firstname")) {
@@ -97,9 +99,9 @@ class UserHandler extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("lastname")) {
             bLastName = true;
             count++;
-        } else if (qName.equalsIgnoreCase("fathername")) {
+       /* } else if (qName.equalsIgnoreCase("fathername")) {
             bFatherName = true;
-            count++;
+            count++;*/
         } else if (qName.equalsIgnoreCase("contact")) {
             bContact = true;
         } else if (qName.equalsIgnoreCase("telephonenumber")) {
@@ -136,9 +138,9 @@ class UserHandler extends DefaultHandler {
         } else if (bLastName) {
             LastName = new String(ch, start, length);
             bLastName = false;
-        } else if (bFatherName) {
+        /*} else if (bFatherName) {
             FatherName = new String(ch, start, length);
-            bFatherName = false;
+            bFatherName = false;*/
         } else if (bTelephoneNumber) {
             TelephoneNumber = new String(ch, start, length);
             bTelephoneNumber = false;
@@ -158,11 +160,11 @@ class UserHandler extends DefaultHandler {
         } else if (bWork) {
             bWork = false;
         }
-        if (count == 7) {
-            people.addLast(new Person(FirstName, LastName, FatherName, TelephoneNumber, Email, Workplace, Integer.valueOf(Experience)));
+        if (count == /*7*/ 6) {
+            people.addLast(new Person(name, FirstName, LastName/*, FatherName*/, TelephoneNumber, Email, Workplace, Integer.valueOf(Experience)));
             bFirstName = false;
             bLastName = false;
-            bFatherName = false;
+           // bFatherName = false;
             bTelephoneNumber = false;
             bEmail = false;
             bWorkplace = false;
@@ -174,7 +176,7 @@ class UserHandler extends DefaultHandler {
 
             FirstName = null;
             LastName = null;
-            FatherName = null;
+            // FatherName = null;
             TelephoneNumber = null;
             Email = null;
             Workplace = null;
@@ -185,7 +187,12 @@ class UserHandler extends DefaultHandler {
     }
 
     protected Person getUser (int index){
-        return people.get(index);
+        if (index < 0 || index >= people.size()) {
+            return null;
+        }
+        else {
+            return people.get(index);
+        }
     }
 
     protected Person[] getPeople(){

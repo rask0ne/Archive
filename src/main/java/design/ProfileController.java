@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Client;
+import models.UserSingleton;
 
 
 /**
@@ -36,8 +37,15 @@ public class ProfileController {
 
     public void registerButtonAction(ActionEvent actionEvent) throws Exception{
 
-        Person person = new Person(txtName.getText(), txtSurname.getText(), "", txtTelephone.getText(), txtEmail.getText(),
-                txtWorkplace.getText(), Integer.valueOf(txtExperience.getText()));
+        Person person;
+        if(UserSingleton.getInstance().getProfile() == "") {
+            person = new Person(UserSingleton.getInstance().getLogin(), txtName.getText(), txtSurname.getText(), txtTelephone.getText(), txtEmail.getText(),
+                    txtWorkplace.getText(), Integer.valueOf(txtExperience.getText()));
+        }
+        else{
+            person = new Person(UserSingleton.getInstance().getProfile(), txtName.getText(), txtSurname.getText(), txtTelephone.getText(), txtEmail.getText(),
+                    txtWorkplace.getText(), Integer.valueOf(txtExperience.getText()));
+        }
 
         Client client = new Client();
         Object o =  client.sendToServer(person);
@@ -53,6 +61,10 @@ public class ProfileController {
                 stage.setScene(scene);
                 stage.setTitle("Archive");
                 stage.show();
+            }
+            if(str.equals("profile edited")){
+                UserSingleton.getInstance().setProfile("");
+                ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
             }
 
         }

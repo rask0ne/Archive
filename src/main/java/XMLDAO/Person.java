@@ -10,6 +10,7 @@ import static XMLDAO.XMLConstants.XMLPARSERCONST.*;
  * Class of user, that was saving in the XML file on Server
  */
 public class Person implements Serializable {
+    private String name;
     private String firstName;
     private String lastName;
     private String fatherName;
@@ -22,13 +23,14 @@ public class Person implements Serializable {
      * Constructor of this class. Check inputs Strings for correct work and initialize fields of object
      * @param firstName First Name of Person [a-Z]
      * @param lastName Last Name of Person [a-Z]
-     * @param fatherName Father Name of Person [a-Z]
+    // * @param fatherName Father Name of Person [a-Z]
      * @param telephoneNumber Telephone Number of Person '+'[0-9]
      * @param mail Mail adress of Person [0-9a-Z]@[gmail,mail,...]'.'[com,ru,...]$
      * @param workPlace The name of the workPlace of Person. Don't have checking
      * @param workExperience The work experience of Person. Don't have checking
      */
-    public Person(String firstName, String lastName, String fatherName, String telephoneNumber, String mail, String workPlace, int workExperience){
+    public Person(String name, String firstName, String lastName/*, String fatherName*/, String telephoneNumber, String mail, String workPlace, int workExperience){
+        this.name = name;
         if (checkName(firstName)) {
             this.firstName = firstName;
         }
@@ -41,12 +43,12 @@ public class Person implements Serializable {
         else {
             this.lastName = null;
         }
-        if (checkName(fatherName)) {
+        /*if (checkName(fatherName)) {
             this.fatherName = fatherName;
         }
         else {
             this.fatherName = null;
-        }
+        }*/
         if (checkNumber(telephoneNumber)) {
             this.telephoneNumber = telephoneNumber;
         }
@@ -99,17 +101,17 @@ public class Person implements Serializable {
      * getting Father Name of this Person
      * @return Father Name of this Person
      */
-    public String getFatherName() {
-        return fatherName;
-    }
+  //  public String getFatherName() {
+  //      return fatherName;
+  //  }
 
     /**
      * setting Father Name of this Person
      * @param fatherName Father Name of this Person
      */
-    public void setFatherName(String fatherName) {
-        this.fatherName = fatherName;
-    }
+   // public void setFatherName(String fatherName) {
+   //     this.fatherName = fatherName;
+   // }
 
     /**
      * getting Telephone Number of this Person
@@ -219,11 +221,11 @@ public class Person implements Serializable {
         if ((mask & XMLBEGIN) == XMLBEGIN){
             result += XMLBegin();
         }
-        result += ("  <user>\n");
+        result += ("  <user name=\"" + this.name + "\">\n");
         result += ("    <FIO>\n");
         result += ("      <firstname>" + this.firstName + "</firstname>\n");
         result += ("      <lastname>" + this.lastName + "</lastname>\n");
-        result += ("      <fathername>" + this.fatherName + "</fathername>\n");
+      //  result += ("      <fathername>" + this.fatherName + "</fathername>\n");
         result += ("    </FIO>\n");
         result += ("    <contact>\n");
         result += ("      <telephonenumber>" + this.telephoneNumber + "</telephonenumber>\n");
@@ -275,14 +277,19 @@ public class Person implements Serializable {
     @Override
     public String toString() {
         String result = "";
+        result += "name - " + this.name + "\n";
         result += "first Name - " + this.firstName + "\n";
         result += "last Name - " + this.lastName + "\n";
-        result += "father Name - " + this.fatherName + "\n";
+   //     result += "father Name - " + this.fatherName + "\n";
         result += "telephone Number - " + this.telephoneNumber + "\n";
         result += "Mail - " + this.mail + "\n";
         result += "Workplace - " + this.workPlace + "\n";
         result += "Experience - " + this.workExperience + "\n";
         return result;
+    }
+
+    public String toShow(){
+        return (this.name + "\t" + this.firstName + "\t" + this.lastName + "\t" + this.telephoneNumber + "\t" + this.mail + "\t" + this.workPlace + "\t" + this.workExperience);
     }
 
     /**
@@ -294,10 +301,18 @@ public class Person implements Serializable {
     public boolean equals(Person person){
         return (this.getFirstName().equals(person.getFirstName()) &&
                 this.getLastName().equals(person.getLastName()) &&
-                this.getFatherName().equals(person.getFatherName()) &&
+        //        this.getFatherName().equals(person.getFatherName()) &&
                 this.getTelephoneNumber().equals(person.getTelephoneNumber()) &&
                 this.getMail().equals(person.getMail()) &&
                 this.getWorkPlace().equals(person.getWorkPlace()) &&
                 this.getWorkExperience() == person.getWorkExperience());
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

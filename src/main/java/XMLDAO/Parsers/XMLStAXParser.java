@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.LinkedList;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -53,9 +54,10 @@ public class XMLStAXParser implements Parserable {
 
         LinkedList<Person> people = new LinkedList<Person>();
 
+        String name = null;
         String FirstName = null;
         String LastName = null;
-        String FatherName = null;
+        //String FatherName = null;
         String TelephoneNumber = null;
         String Email = null;
         String Workplace = null;
@@ -63,7 +65,7 @@ public class XMLStAXParser implements Parserable {
 
         boolean bFirstName = false;
         boolean bLastName = false;
-        boolean bFatherName = false;
+        //boolean bFatherName = false;
         boolean bTelephoneNumber = false;
         boolean bEmail = false;
         boolean bWorkplace = false;
@@ -85,14 +87,15 @@ public class XMLStAXParser implements Parserable {
                             StartElement startElement = event.asStartElement();
                             String qName = startElement.getName().getLocalPart();
                             if (qName.equalsIgnoreCase("user")) {
+                                name = startElement.getAttributeByName(new QName("name")).getValue();
                             } else if (qName.equalsIgnoreCase("FIO")) {
                                 bFIO = true;
                             } else if (qName.equalsIgnoreCase("firstname")) {
                                 bFirstName = true;
                             } else if (qName.equalsIgnoreCase("lastname")) {
                                 bLastName = true;
-                            } else if (qName.equalsIgnoreCase("fathername")) {
-                                bFatherName = true;
+                           /* } else if (qName.equalsIgnoreCase("fathername")) {
+                                bFatherName = true;*/
                             } else if (qName.equalsIgnoreCase("contact")) {
                                 bContact = true;
                             } else if (qName.equalsIgnoreCase("telephonenumber")) {
@@ -117,10 +120,10 @@ public class XMLStAXParser implements Parserable {
                                 LastName = characters.getData();
                                 bLastName = false;
                             }
-                            if (bFatherName) {
+                            /*if (bFatherName) {
                                 FatherName = characters.getData();
                                 bFatherName = false;
-                            }
+                            }*/
                             if (bTelephoneNumber) {
                                 TelephoneNumber = characters.getData();
                                 bTelephoneNumber = false;
@@ -141,10 +144,10 @@ public class XMLStAXParser implements Parserable {
                         case XMLStreamConstants.END_ELEMENT:
                             EndElement endElement = event.asEndElement();
                             if (endElement.getName().getLocalPart().equalsIgnoreCase("user")) {
-                                people.addLast(new Person(FirstName, LastName, FatherName, TelephoneNumber, Email, Workplace, Integer.valueOf(Experience)));
+                                people.addLast(new Person(name, FirstName, LastName/*, FatherName*/, TelephoneNumber, Email, Workplace, Integer.valueOf(Experience)));
                                 bFirstName = false;
                                 bLastName = false;
-                                bFatherName = false;
+                                //bFatherName = false;
                                 bTelephoneNumber = false;
                                 bEmail = false;
                                 bWorkplace = false;
@@ -156,7 +159,7 @@ public class XMLStAXParser implements Parserable {
 
                                 FirstName = null;
                                 LastName = null;
-                                FatherName = null;
+                                //FatherName = null;
                                 TelephoneNumber = null;
                                 Email = null;
                                 Workplace = null;
@@ -173,7 +176,12 @@ public class XMLStAXParser implements Parserable {
         }
 
         protected Person getUser(int index) {
-            return people.get(index);
+            if (index < 0 || index >= people.size()) {
+                return null;
+            }
+            else {
+                return people.get(index);
+            }
         }
 
         protected Person[] getPeople() {
