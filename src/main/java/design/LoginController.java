@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Client;
 import models.User;
+import models.UserSingleton;
 import models.UsersEntity;
 import org.apache.log4j.Logger;
 import repositories.UserRepository;
@@ -42,19 +43,23 @@ public class LoginController {
 
     public void loginButtonAction(ActionEvent actionEvent) throws Exception {
 
-        User user = new User(txtUsername.getText(), "", 2);
+        User user = new User(txtUsername.getText(), "", "");
         boolean check = true;
         String query;
 
         String password = new md5Crypt().md5Apache(txtPassword.getText());
         user.setPassword(password);
         user.setAction("Login");
+
         Client client = new Client();
         Object o = client.sendToServer(user);
 
         if(o instanceof String){
             String str = (String)o;
             if(str.equals("Loggined Successfully")){
+
+                UserSingleton.getInstance().setLogin(txtUsername.getText());
+                UserSingleton.getInstance().setPassword(password);
                 ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
                 Parent parent = FXMLLoader.load(getClass().getResource("Catalog.fxml"));
                 Stage stage = new Stage();
@@ -74,6 +79,8 @@ public class LoginController {
 
     public void guestAction(ActionEvent actionEvent) throws Exception{
 
+        UserSingleton.getInstance().setLogin("guest");
+        UserSingleton.getInstance().setRole("guest");
         ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
         Parent parent = FXMLLoader.load(getClass().getResource("Catalog.fxml"));
         Stage stage = new Stage();

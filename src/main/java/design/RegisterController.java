@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Client;
 import models.User;
+import models.UserSingleton;
 import models.UsersEntity;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -62,7 +63,7 @@ public class RegisterController{
 
         password = new md5Crypt().md5Apache(password);
 
-        User user = new User(txtUsername.getText(), password, 2);
+        User user = new User(txtUsername.getText(), password, "");
         user.setAction("Check if registered");
         Client client = new Client();
         System.out.println("sent to server");
@@ -72,6 +73,8 @@ public class RegisterController{
         if(o instanceof String){
             String str = (String)o;
             if(str.equals("Registered Successfully")){
+                UserSingleton.getInstance().setLogin(txtUsername.getText());
+                UserSingleton.getInstance().setPassword(password);
                 ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
 
                 Parent parent = FXMLLoader.load(getClass().getResource("Profile.fxml"));

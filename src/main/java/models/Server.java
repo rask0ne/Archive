@@ -110,7 +110,7 @@ public class Server implements Runnable{
 
             if (check == true) {
 
-                UsersEntity userBD = new UsersEntity(user.getLogin(), user.getPassword(), 2);
+                UsersEntity userBD = new UsersEntity(user.getLogin(), user.getPassword(), "user");
 
                 query = "insert into users (username, password, role)"
                         + " values (?, ?, ?)";
@@ -118,7 +118,7 @@ public class Server implements Runnable{
                 PreparedStatement preparedStmt = (PreparedStatement) con.prepareStatement(query);
                 preparedStmt.setString (1, user.getLogin());
                 preparedStmt.setString (2, user.getPassword());
-                preparedStmt.setInt(3, 2);
+                preparedStmt.setString(3, "user");
                 preparedStmt.execute();
 
                 String message = "Registered Successfully";
@@ -146,7 +146,28 @@ public class Server implements Runnable{
 
                 }
             }
+        }
+        if(user.getAction().equals("Change Roles")){
 
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
+            stmt = (Statement) con.createStatement();
+            String query = "SELECT Id, Username, Role FROM users;";
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()) {
+
+                String dbUsername = rs.getString("username");
+                String dbRole = rs.getString("role");
+
+                if (user.getLogin().equals(dbUsername) && dbRole.equals("admin")) {
+
+                    String message = "Open Change Table";
+
+                    return message;
+
+                }
+            }
+            return "You are not an admin";
         }
         return null;
     }

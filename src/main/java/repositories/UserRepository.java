@@ -21,6 +21,12 @@ public class UserRepository {
     private int role;
     private int userId;
 
+    public UserRepository(int id, String username, int role){
+        this.userId = id;
+        this.username = username;
+        this.role = role;
+    }
+
     public static final UserRepository getInstance(){
 
         if(instance == null){

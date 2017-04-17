@@ -1,24 +1,33 @@
 package models;
 
-import java.io.Serializable;
-
 /**
- * Created by rask on 15.04.2017.
+ * Created by rask on 17.04.2017.
  */
-public class User implements Serializable{
+public class UserSingleton {
+
+    private static UserSingleton instance = null;
 
     private String login;
     private String password;
     private String role;
     private String action;
 
-    public User(String login, String password, String role){
+    public UserSingleton(String login, String password, String role){
         this.setLogin(login);
         this.setPassword(password);
         this.setRole(role);
     }
 
-    public User(){}
+    public UserSingleton(){}
+
+    public static final UserSingleton getInstance(){
+
+        if(instance == null){
+            instance = new UserSingleton();
+
+        }
+        return instance;
+    }
 
     public String getRole(){
         return this.role;
@@ -51,4 +60,5 @@ public class User implements Serializable{
     public void setAction(String action){
         this.action = action;
     }
+
 }

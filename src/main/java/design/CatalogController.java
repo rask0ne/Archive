@@ -4,6 +4,7 @@ package design;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import crypt.md5Crypt;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,6 +21,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import models.Client;
+import models.User;
+import models.UserSingleton;
 import org.apache.log4j.Logger;
 
 import repositories.UserRepository;
@@ -83,7 +87,7 @@ public class CatalogController {
     @FXML
     public void initialize() throws SQLException, ClassNotFoundException {
 
-        lblTextMessage.setText(UserRepository.getInstance().getName());
+        lblTextMessage.setText(UserSingleton.getInstance().getLogin());
 
         //updateTableView();
 
@@ -329,6 +333,46 @@ public class CatalogController {
         stage.show();
 
         logger.info("Created window 'Login' from changeUserButton");
+
+    }
+
+    public void getDOM(ActionEvent actionEvent) {
+    }
+
+    public void getJDOM(ActionEvent actionEvent) {
+    }
+
+    public void getSAX(ActionEvent actionEvent) {
+    }
+
+    public void getStAX(ActionEvent actionEvent) {
+    }
+
+    public void changeRolesButton(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+
+        User user = new User(UserSingleton.getInstance().getLogin(), "", "");
+        boolean check = true;
+        String query;
+
+        user.setAction("Change Roles");
+
+        Client client = new Client();
+        Object o = client.sendToServer(user);
+
+        if(o instanceof String){
+            String str = (String)o;
+            if(str.equals("Open Change Table")){
+
+                //((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+                Parent parent = FXMLLoader.load(getClass().getResource("ChangeRoles.fxml"));
+                Stage stage = new Stage();
+                Scene scene = new Scene(parent);
+                stage.setScene(scene);
+                stage.setTitle("Change Roles");
+                stage.show();
+            }
+        }
+
 
     }
 }
