@@ -59,6 +59,18 @@ public class LoginController {
                 stage.setTitle("Archive");
                 stage.show();
             }
+            if(str.equals("Create new profile")){
+                UserSingleton.getInstance().setLogin(txtUsername.getText());
+                UserSingleton.getInstance().setPassword(password);
+                ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
+
+                Parent parent = FXMLLoader.load(getClass().getResource("Profile.fxml"));
+                Stage stage = new Stage();
+                Scene scene = new Scene(parent);
+                stage.setScene(scene);
+                stage.setTitle("Profile");
+                stage.show();
+            }
         }
 
         lblMessage.setText("Wrong username or password!");

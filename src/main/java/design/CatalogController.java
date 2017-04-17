@@ -73,12 +73,7 @@ public class CatalogController {
 
         lblTextMessage.setText(UserSingleton.getInstance().getLogin());
 
-        User user = new User(UserSingleton.getInstance().getLogin(), "", "");
-        user.setAction("Get Profiles");
-        Client client = new Client();
-        ArrayList<Person> list = (ArrayList<Person>)client.sendToServer(user);
-
-        updateTableView(list);
+        updateTableView();
 
     }
 
@@ -121,9 +116,12 @@ public class CatalogController {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public void updateTableView(ArrayList<Person> list) throws SQLException, ClassNotFoundException {
+    public void updateTableView() throws SQLException, ClassNotFoundException, IOException {
 
-
+        User user = new User(UserSingleton.getInstance().getLogin(), "", "");
+        user.setAction("Get Profiles");
+        Client client = new Client();
+        ArrayList<Person> list = (ArrayList<Person>)client.sendToServer(user);
        // FileDataAccessor dataAccessor = new FileDataAccessor("jdbc:mysql://localhost:3306/catalogdb?useSSL=false", "root", "root"); // provide driverName, dbURL, user, password...
         ArrayList<XMLRepository> username = new ArrayList<>();
         for(int i = 0; i < list.size(); i++){
@@ -154,40 +152,6 @@ public class CatalogController {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    /*public void updateTableView(String name) throws SQLException, ClassNotFoundException {
-
-
-        FileDataAccessor dataAccessor = new FileDataAccessor("jdbc:mysql://localhost:3306/catalogdb?useSSL=false", "root", "root"); // provide driverName, dbURL, user, password...
-
-        TableView<FileRepository> personTable = new TableView<>();
-        TableColumn<FileRepository, String> firstNameCol = new TableColumn<>("File Name");
-        firstNameCol.setCellValueFactory(new PropertyValueFactory<FileRepository, String>("fileName"));
-        TableColumn<FileRepository, String> usernameCol = new TableColumn<>("Person");
-        usernameCol.setCellValueFactory(new PropertyValueFactory<FileRepository, String>("username"));
-
-
-        tableView.getItems().clear();
-        if(tableView.getColumns().isEmpty())
-            tableView.getColumns().addAll(firstNameCol, usernameCol);
-
-
-        tableView.getItems().addAll(dataAccessor.getSearchFileList(name));
-
-        logger.info("TableView with found files updated");
-    }*/
-
-    /**
-     * Button to open file.
-     * @param actionEvent
-     * @throws IOException
-     * @throws SQLException
-     */
-   /* public void openButtonAction(ActionEvent actionEvent) throws IOException, SQLException {
-
-        FileRepository file = (FileRepository) tableView.getSelectionModel().getSelectedItem();
-        file.execution();
-
-    }*/
 
     /**
      * Button to change current user. Creates window 'Login'.
@@ -315,15 +279,26 @@ public class CatalogController {
             stage.setTitle("Profile");
             stage.show();
         }
-        /*while(true){
-            if(UserSingleton.getInstance().getProfile().equals(""))
-                break;
-        }*/
 
     }
 
 
-    public void deleteProfileAction(ActionEvent actionEvent) {
+    public void deleteProfileAction(ActionEvent actionEvent) throws IOException, ClassNotFoundException, SQLException {
+
+        XMLRepository xml = (XMLRepository) tableView.getSelectionModel().getSelectedItem();
+
+        User user = new User(UserSingleton.getInstance().getLogin(), "", "");
+        user.setAction("Delete user profile");
+        user.setUserProfile(xml.getUsername());
+        UserSingleton.getInstance().setProfile(xml.getUsername());
+
+        Client client = new Client();
+        String str =  (String)client.sendToServer(user);
+
+        if(str.equals("deleted")){
+            updateTableView();
+        }
+
     }
 }
 

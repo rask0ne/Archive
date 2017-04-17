@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class>
-  <user name="kek">
-    <FIO>
-      <firstname>gfdgdg</firstname>
-      <lastname>fgdgfd</lastname>
-    </FIO>
-    <contact>
-      <telephonenumber>+231231</telephonenumber>
-      <mail>fdgfgd@gmail.com</mail>
-    </contact>
-    <work>
-      <workplace>12313</workplace>
-      <experience>2</experience>
-    </work>
-  </user>
   <user name="hello">
     <FIO>
       <firstname>fsdfdsf</firstname>
@@ -28,18 +14,32 @@
       <experience>1</experience>
     </work>
   </user>
-  <user name="world">
+  <user name="kek">
     <FIO>
-      <firstname>sfsdf</firstname>
-      <lastname>dsfs</lastname>
+      <firstname>sfdsf</firstname>
+      <lastname>fdsfs</lastname>
     </FIO>
     <contact>
-      <telephonenumber>+231312</telephonenumber>
-      <mail>unddsf@gmail.com</mail>
+      <telephonenumber>+32131</telephonenumber>
+      <mail>fdsf@gmail.com</mail>
     </contact>
     <work>
-      <workplace>fdsfsf</workplace>
-      <experience>1</experience>
+      <workplace>fdsf</workplace>
+      <experience>2</experience>
+    </work>
+  </user>
+  <user name="world">
+    <FIO>
+      <firstname>gfdg</firstname>
+      <lastname>dfsdf</lastname>
+    </FIO>
+    <contact>
+      <telephonenumber>+32121</telephonenumber>
+      <mail>fdsf@gmail.com</mail>
+    </contact>
+    <work>
+      <workplace>fdsff</workplace>
+      <experience>121</experience>
     </work>
   </user>
 </class>

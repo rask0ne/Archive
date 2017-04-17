@@ -168,9 +168,9 @@ public class Server implements Runnable{
 
                 if (user.getLogin().equals(dbUsername) && user.getPassword().equals(dbPassword)) {
 
-                    String message = "Loggined Successfully";
-
-                    return message;
+                    if(xmlEditor.findIndexAsName(user.getLogin()) == -1)
+                        return "Create new profile";
+                    else return "Loggined Successfully";
 
                 }
             }
@@ -377,6 +377,27 @@ public class Server implements Runnable{
                         && dbRole.equals("admin"))) {
 
                     String message = "You have rights";
+                    return message;
+                }
+            }
+            return "you dont have rights";
+        }
+        if(user.getAction().equals("Delete user profile")) {
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
+            stmt = (Statement) con.createStatement();
+            String query = "SELECT Username, Role FROM users;";
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()) {
+
+                String dbUsername = rs.getString("username");
+                String dbRole = rs.getString("role");
+
+                if (user.getLogin().equals(user.getUserProfile()) || (user.getLogin().equals(dbUsername)
+                        && dbRole.equals("admin"))) {
+
+                    xmlEditor.delete(xmlEditor.findIndexAsName(user.getUserProfile()));
+                    String message = "deleted";
                     return message;
                 }
             }
