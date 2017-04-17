@@ -1,8 +1,16 @@
 package models;
 
+import XMLDAO.Parsers.XMLDOMParser;
+import XMLDAO.Parsers.XMLJDOMParser;
+import XMLDAO.Parsers.XMLSAXParser;
+import XMLDAO.Parsers.XMLStAXParser;
+import XMLDAO.Person;
+import XMLDAO.XMLEditor;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
+import hibernate.Util.UsersDataAccessor;
+import repositories.UserRepository;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,6 +20,7 @@ import java.net.Socket;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by rask on 15.04.2017.
@@ -20,11 +29,13 @@ public class Server implements Runnable{
 
     ServerSocket listener = new ServerSocket(8000);
     Socket client;
+    private XMLEditor xmlEditor = new XMLEditor("archive.xml", new XMLDOMParser(), "archive.zip");
 
     public Server() throws IOException, ClassNotFoundException {
     }
 
     public void run() {
+
         while(true){
             try {
                 client = listener.accept();
@@ -68,7 +79,7 @@ public class Server implements Runnable{
             try {
                 System.out.println("instance of user");
                 User user = (User)o;
-                String obj = actionForUser(user);
+                Object obj = actionForUser(user);
                 return obj;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -77,12 +88,22 @@ public class Server implements Runnable{
             }
         }
         if(o instanceof Person){
-            //actionForPersonDOM();
+            System.out.println("instance of Person");
+            Person person = (Person)o;
+            String obj = actionForPerson(person);
+            return obj;
         }
         return o;
     }
 
-    String actionForUser(User user) throws SQLException, IOException, ClassNotFoundException {
+    private String actionForPerson(Person person) {
+
+        xmlEditor.addInEnd(person);
+        return "Profile created successfully";
+
+    }
+
+    Object actionForUser(User user) throws SQLException, IOException, ClassNotFoundException {
 
         Connection con;
         Statement stmt;
@@ -161,6 +182,7 @@ public class Server implements Runnable{
 
                 if (user.getLogin().equals(dbUsername) && dbRole.equals("admin")) {
 
+
                     String message = "Open Change Table";
 
                     return message;
@@ -168,6 +190,163 @@ public class Server implements Runnable{
                 }
             }
             return "You are not an admin";
+        }
+        if(user.getAction().equals("Get DOM parser")){
+
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
+            stmt = (Statement) con.createStatement();
+            String query = "SELECT Id, Username, Role FROM users;";
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()) {
+
+                String dbUsername = rs.getString("username");
+                String dbRole = rs.getString("role");
+
+                if (user.getLogin().equals(dbUsername) && dbRole.equals("admin")) {
+
+                    xmlEditor.setParser(new XMLDOMParser());
+                    String message = "DOM setted";
+
+                    return message;
+
+                }
+            }
+            return "You are not an admin";
+        }
+        if(user.getAction().equals("Get JDOM parser")){
+
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
+            stmt = (Statement) con.createStatement();
+            String query = "SELECT Id, Username, Role FROM users;";
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()) {
+
+                String dbUsername = rs.getString("username");
+                String dbRole = rs.getString("role");
+
+                if (user.getLogin().equals(dbUsername) && dbRole.equals("admin")) {
+
+                    xmlEditor.setParser(new XMLJDOMParser());
+                    String message = "JDOM setted";
+
+                    return message;
+
+                }
+            }
+            return "You are not an admin";
+        }
+        if(user.getAction().equals("Get SAX parser")){
+
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
+            stmt = (Statement) con.createStatement();
+            String query = "SELECT Id, Username, Role FROM users;";
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()) {
+
+                String dbUsername = rs.getString("username");
+                String dbRole = rs.getString("role");
+
+                if (user.getLogin().equals(dbUsername) && dbRole.equals("admin")) {
+
+                    xmlEditor.setParser(new XMLSAXParser());
+                    String message = "SAX setted";
+
+                    return message;
+
+                }
+            }
+            return "You are not an admin";
+        }
+        if(user.getAction().equals("Get StAX parser")){
+
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
+            stmt = (Statement) con.createStatement();
+            String query = "SELECT Id, Username, Role FROM users;";
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()) {
+
+                String dbUsername = rs.getString("username");
+                String dbRole = rs.getString("role");
+
+                if (user.getLogin().equals(dbUsername) && dbRole.equals("admin")) {
+
+                    xmlEditor.setParser(new XMLStAXParser());
+                    String message = "StAX setted";
+
+                    return message;
+
+                }
+            }
+            return "You are not an admin";
+        }
+        if(user.getAction().equals("Change to admin")){
+
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
+            stmt = (Statement) con.createStatement();
+            String query = "SELECT Id, Username, Role FROM users;";
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()) {
+
+                String dbUsername = rs.getString("username");
+
+                if (user.getLogin().equals(dbUsername)) {
+
+                    query = "UPDATE users SET role= ? WHERE username = ? ";
+
+                    PreparedStatement preparedStmt = (PreparedStatement) con.prepareStatement(query);
+                    preparedStmt.setString (1, user.getRole());
+                    preparedStmt.setString (2, user.getLogin());
+                    preparedStmt.execute();
+                    String message = "Changed to admin. Welcome!";
+                    UsersDataAccessor access = new UsersDataAccessor("jdbc:mysql://localhost:3306/archive?useSSL=false", "root", "root");
+
+                    return access.getFileList();
+
+                }
+            }
+            return "You are not an admin";
+        }
+        if(user.getAction().equals("Change to user")){
+
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
+            stmt = (Statement) con.createStatement();
+            String query = "SELECT Id, Username, Role FROM users;";
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()) {
+
+                String dbUsername = rs.getString("username");
+                String dbRole = rs.getString("role");
+
+                if (user.getLogin().equals(dbUsername)) {
+
+                    query = "UPDATE users SET role= ? WHERE username = ? ";
+
+                    PreparedStatement preparedStmt = (PreparedStatement) con.prepareStatement(query);
+                    preparedStmt.setString (1, user.getRole());
+                    preparedStmt.setString (2, user.getLogin());
+                    preparedStmt.execute();
+                    String message = "Changed to user. Welcome!";
+
+                    UsersDataAccessor access = new UsersDataAccessor("jdbc:mysql://localhost:3306/archive?useSSL=false", "root", "root");
+
+                    return access.getFileList();
+
+                }
+            }
+            return "You are not an admin";
+        }
+        if(user.getAction().equals("Update Table of Users")){
+
+            System.out.println("Update Users");
+            UsersDataAccessor access = new UsersDataAccessor("jdbc:mysql://localhost:3306/archive?useSSL=false", "root", "root");
+
+            return access.getFileList();
         }
         return null;
     }

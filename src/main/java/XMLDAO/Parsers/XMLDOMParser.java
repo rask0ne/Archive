@@ -1,7 +1,6 @@
 package XMLDAO.Parsers;
 
-import XMLDAO.User;
-import XMLDAO.XMLConstants.XMLCONST;
+import XMLDAO.Person;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -15,11 +14,17 @@ import java.io.File;
 
 /**
  * Created by Alexey on 15.04.2017.
+ * The DOM parser for XML file. Uses as tool in XMLEditor
  */
-public class XMLDOMParser implements Parserable{
+public class XMLDOMParser implements Parserable {
 
+    /**
+     * Parse XML file for getting array of people, saving in file
+     * @param path the path of xml file for parse
+     * @return the array of people in xml file (path)
+     */
     @Nullable
-    public User[] parseFromXML(String path) {
+    public Person[] parseFromXML(String path) {
         try {
             File inputFile = new File(path);
             if (!inputFile.exists()){
@@ -33,25 +38,31 @@ public class XMLDOMParser implements Parserable{
             doc.getDocumentElement().normalize();
             NodeList nList = doc.getElementsByTagName("user");
             System.out.println(nList.getLength());
-            User[] users;
+            Person[] people;
             if (nList.getLength() > 0) {
-                users = new User[nList.getLength()];
+                people = new Person[nList.getLength()];
             }
             else {
-                users = null;
+                people = null;
             }
             for (int temp = 0; temp < nList.getLength(); temp++) {
-                    users[temp] = parseFromXML(path, temp);
+                    people[temp] = parseFromXML(path, temp);
             }
-            return users;
+            return people;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * Parse XML file for getting user with @param index from this xml file
+     * @param path the path of xml file for parsing
+     * @param index the index of getting user
+     * @return the user with @param index
+     */
     @Nullable
-    public User parseFromXML(String path, int index) {
+    public Person parseFromXML(String path, int index) {
         try {
             String firstName = null;
             String lastName = null;
@@ -67,27 +78,30 @@ public class XMLDOMParser implements Parserable{
             Document doc = dBuilder.parse(inputFile);
             doc.getDocumentElement().normalize();
             NodeList nList = doc.getElementsByTagName("user");
+            if (index < 0 || index >= nList.getLength()){
+                return null;
+            }
             Node nNode = nList.item(index);
             NodeList fioList = doc.getElementsByTagName("FIO");
             Node fioNode = fioList.item(index);
             if (fioNode.getNodeType() == Node.ELEMENT_NODE) {
-                firstName = getXMLArgument(fioNode, "firstname", XMLCONST.XMLNAME);
-                lastName = getXMLArgument(fioNode, "lastname", XMLCONST.XMLNAME);
-                fatherName = getXMLArgument(fioNode, "fathername", XMLCONST.XMLNAME);
+                firstName = getXMLArgument(fioNode, "firstname");
+                lastName = getXMLArgument(fioNode, "lastname");
+                fatherName = getXMLArgument(fioNode, "fathername");
             }
             NodeList contactList = doc.getElementsByTagName("contact");
             Node contactNode = contactList.item(index);
             if (contactNode.getNodeType() == Node.ELEMENT_NODE) {
-                telephoneNumber = getXMLArgument(contactNode, "telephonenumber", XMLCONST.XMLPHONENUMBER);
-                mail = getXMLArgument(contactNode, "mail", XMLCONST.XMLMAIl);
+                telephoneNumber = getXMLArgument(contactNode, "telephonenumber");
+                mail = getXMLArgument(contactNode, "mail");
             }
             NodeList workList = doc.getElementsByTagName("work");
             Node workNode = workList.item(index);
             if (workNode.getNodeType() == Node.ELEMENT_NODE) {
-                workPlace = getXMLArgument(workNode, "workplace", XMLCONST.XMLNONE);
-                workExperience = Integer.valueOf(getXMLArgument(nNode, "experience", XMLCONST.XMLEXPERIENCE));
+                workPlace = getXMLArgument(workNode, "workplace");
+                workExperience = Integer.valueOf(getXMLArgument(nNode, "experience"));
             }
-            return new User(firstName, lastName, fatherName, telephoneNumber, mail, workPlace, workExperience);
+            return new Person(firstName, lastName, fatherName, telephoneNumber, mail, workPlace, workExperience);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -95,49 +109,18 @@ public class XMLDOMParser implements Parserable{
     }
 
 
+    /**
+     * private method for getting value of attribute from Node in XML file
+     * @param nNode the Node in XML file
+     * @param attribute the name of attribute to getting it value
+     * @return the value of this argument
+     */
     @Nullable
-    private static String getXMLArgument(Node nNode, String attribute, int mask) {
+    private static String getXMLArgument(Node nNode, String attribute) {
         if (nNode.getNodeType() == Node.ELEMENT_NODE) {
             Element eElement = (Element) nNode;
-            String result = eElement.getElementsByTagName(attribute).item(0).getTextContent();
-            if ((mask & XMLCONST.XMLNAME) == XMLCONST.XMLNAME) {
-                if (result.matches("^[a-zA-Z ]+$")) {
-                    return result;
-                } else {
-                    return null;
-                }
-            }
-            if ((mask & XMLCONST.XMLPHONENUMBER) == XMLCONST.XMLPHONENUMBER) {
-                if (result.matches("^[+][0-9]+$")) {
-                    return result;
-                } else {
-                    return null;
-                }
-            }
-            if ((mask & XMLCONST.XMLMAIl) == XMLCONST.XMLMAIl) {
-                if (result.matches(".*@([a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\\.)*(ru|aero|arpa|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])$")) {
-                    return result;
-                } else {
-                    return null;
-                }
-            }
-            if ((mask & XMLCONST.XMLEXPERIENCE) == XMLCONST.XMLEXPERIENCE) {
-                if (result.matches("^[0-9]+$")) {
-                    return result;
-                } else {
-                    return "0";
-                }
-            }
-            return result;
+            return eElement.getElementsByTagName(attribute).item(0).getTextContent();
         }
         return null;
     }
-
-    public static String XMLBegin(){
-        return ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") + ("<class>\n");
     }
-
-    public static String XMLEnd(){
-        return ("</class>");
-    }
-}

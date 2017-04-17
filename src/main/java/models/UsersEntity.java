@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 
 /**
- * Entity for users table in the database.
+ * Entity for people table in the database.
  */
 @Entity
 @Table(name = "users", schema = "archive", catalog = "")

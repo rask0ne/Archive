@@ -1,6 +1,7 @@
 package design;
 
 
+import XMLDAO.Person;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Client;
-import models.Person;
 
 
 /**
@@ -36,18 +36,18 @@ public class ProfileController {
 
     public void registerButtonAction(ActionEvent actionEvent) throws Exception{
 
-        Person person = new Person(txtName.getText(), txtSurname.getText(), txtTelephone.getText(), txtEmail.getText(),
-                txtWorkplace.getText(), txtExperience.getText());
+        Person person = new Person(txtName.getText(), txtSurname.getText(), "", txtTelephone.getText(), txtEmail.getText(),
+                txtWorkplace.getText(), Integer.valueOf(txtExperience.getText()));
 
         Client client = new Client();
         Object o =  client.sendToServer(person);
 
         if(o instanceof String){
             String str = (String)o;
-            if(str.equals("Registered Successfully")){
+            if(str.equals("Profile created successfully")){
                 ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
 
-                Parent parent = FXMLLoader.load(getClass().getResource("Archive.fxml"));
+                Parent parent = FXMLLoader.load(getClass().getResource("Catalog.fxml"));
                 Stage stage = new Stage();
                 Scene scene = new Scene(parent);
                 stage.setScene(scene);

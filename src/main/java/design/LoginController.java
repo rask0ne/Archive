@@ -1,8 +1,5 @@
 package design;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
 import crypt.md5Crypt;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,12 +14,6 @@ import javafx.stage.Stage;
 import models.Client;
 import models.User;
 import models.UserSingleton;
-import models.UsersEntity;
-import org.apache.log4j.Logger;
-import repositories.UserRepository;
-
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 
 /**
  * Controller of 'Login' window.

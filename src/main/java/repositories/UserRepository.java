@@ -1,75 +1,41 @@
 package repositories;
 
-import models.UsersEntity;
+import com.mysql.jdbc.Connection;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+import java.io.Serializable;
+import java.sql.DriverManager;
 
 /**
- * Created by rask on 03.03.2017.
+ * Created by rask on 17.04.2017.
  */
-
-/**
- * User singleton class to keep information during programm work.
- */
-public class UserRepository {
-
-    private static UserRepository instance = null;
-
-    //public UsersEntity user = new UsersEntity();
-
-    public UserRepository() {};
+public class UserRepository implements Serializable{
 
     private String username;
-    private int role;
-    private int userId;
+    private String role;
 
-    public UserRepository(int id, String username, int role){
-        this.userId = id;
-        this.username = username;
-        this.role = role;
-    }
+   public void setRole(String role){
+       this.role = role;
+   }
 
-    public static final UserRepository getInstance(){
+   public void setUsername(String username){
+       this.username = username;
+   }
 
-        if(instance == null){
-             instance = new UserRepository();
+   public String getUsername(){
+       return this.username;
+   }
 
-            }
-        return instance;
-    }
+   public String getRole(){
+       return  this.role;
+   }
 
-    public int getId(){
+    public UserRepository() {}
 
-        return userId;
-
-    }
-
-    public int getRole(){
-
-        return role;
-
-    }
-
-    public String getName(){
-
-        return username;
-
-    }
-
-    public void setId(int id){
-
-        this.userId = id;
-
-    }
-
-    public void setRole(int role){
-
-        this.role = role;
-
-    }
-
-    public void setUsername(String name){
-
-        this.username = name;
-
+    public UserRepository(String username, String role) {
+        setUsername(username);
+        setRole(role);
     }
 
 }

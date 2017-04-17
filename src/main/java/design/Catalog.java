@@ -1,15 +1,11 @@
 package design;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import models.UsersEntity;
 import org.apache.log4j.Logger;
-import repositories.UserRepository;
 
 /**
  * Created by rask on 01.03.2017.
@@ -39,5 +35,7 @@ public class Catalog extends Application {
         start(stage);
 
     }
+
+
 
 }

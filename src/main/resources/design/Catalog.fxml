@@ -18,7 +18,7 @@
         </Label>
       <TableView fx:id="tableView" layoutX="14.0" layoutY="100.0" prefHeight="417.0" prefWidth="504.0" />
       <TextField fx:id="srchText" layoutX="546.0" layoutY="100.0" onAction="#searchAction" prefHeight="31.0" prefWidth="274.0" />
-      <Button fx:id="showProfileButton" layoutX="549.0" layoutY="172.0" mnemonicParsing="false" onAction="#uploadActionButton" prefHeight="31.0" prefWidth="119.0" text="Show Profile" />
+      <Button fx:id="showProfileButton" layoutX="549.0" layoutY="172.0" mnemonicParsing="false" onAction="#showProfileButton" prefHeight="31.0" prefWidth="119.0" text="Show Profile" />
       <Button fx:id="changeProfileButton" layoutX="549.0" layoutY="241.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="119.0" text="Change Profile" />
       <Label fx:id="lblTextMessage" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="25.0" prefHeight="31.0" prefWidth="222.0" text="User" textAlignment="CENTER">
          <font>

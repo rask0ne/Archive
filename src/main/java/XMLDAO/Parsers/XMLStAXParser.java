@@ -1,18 +1,16 @@
 package XMLDAO.Parsers;
 
-import XMLDAO.User;
+import XMLDAO.Person;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
@@ -20,19 +18,28 @@ import javax.xml.stream.events.XMLEvent;
 
 public class XMLStAXParser implements Parserable {
 
-    @Override
-    public User[] parseFromXML(String path) {
+    /**
+     * Parse XML file for getting array of people, saving in file
+     * @param path the path of xml file for parse
+     * @return the array of people in xml file (path)
+     */
+    public Person[] parseFromXML(String path) {
         File inputFile = new File(path);
         if (!inputFile.exists()) {
             return null;
         }
         Handler handler = new Handler();
         handler.startParsing(path);
-        return handler.getUsers();
+        return handler.getPeople();
     }
 
-    @Override
-    public User parseFromXML(String path, int index) {
+    /**
+     * Parse XML file for getting user with @param index from this xml file
+     * @param path the path of xml file for parsing
+     * @param index the index of getting user
+     * @return the user with @param index
+     */
+    public Person parseFromXML(String path, int index) {
         File inputFile = new File(path);
         if (!inputFile.exists()) {
             return null;
@@ -44,7 +51,7 @@ public class XMLStAXParser implements Parserable {
 }
     class Handler {
 
-        LinkedList<User> users = new LinkedList<User>();
+        LinkedList<Person> people = new LinkedList<Person>();
 
         String FirstName = null;
         String LastName = null;
@@ -134,7 +141,7 @@ public class XMLStAXParser implements Parserable {
                         case XMLStreamConstants.END_ELEMENT:
                             EndElement endElement = event.asEndElement();
                             if (endElement.getName().getLocalPart().equalsIgnoreCase("user")) {
-                                users.addLast(new User(FirstName, LastName, FatherName, TelephoneNumber, Email, Workplace, Integer.valueOf(Experience)));
+                                people.addLast(new Person(FirstName, LastName, FatherName, TelephoneNumber, Email, Workplace, Integer.valueOf(Experience)));
                                 bFirstName = false;
                                 bLastName = false;
                                 bFatherName = false;
@@ -165,15 +172,15 @@ public class XMLStAXParser implements Parserable {
             }
         }
 
-        protected User getUser(int index) {
-            return users.get(index);
+        protected Person getUser(int index) {
+            return people.get(index);
         }
 
-        protected User[] getUsers() {
-            User list[] = new User[users.size()];
+        protected Person[] getPeople() {
+            Person list[] = new Person[people.size()];
             int i = 0;
-            for (User user : users) {
-                list[i++] = user;
+            for (Person person : people) {
+                list[i++] = person;
             }
             return list;
         }
