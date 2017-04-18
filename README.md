@@ -1,2 +1,2 @@
-# Catalog
-Home Catalogizer 
+# Archive
+Client-Server archive of user profiles with integrated DB
