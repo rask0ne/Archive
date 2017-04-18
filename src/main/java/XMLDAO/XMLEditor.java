@@ -252,7 +252,7 @@ public class XMLEditor {
 
     /**
      * zipping XML file with this capacity of zipping
-     * @param capacity capacity of zipping in Bounds: [0,9]. Other -> default capacity
+     * @param capacity capacity of zipping in Bounds: [0,9]. Other - default capacity
      */
     public void compress(int capacity){
         Compressor compressor = new Compressor();

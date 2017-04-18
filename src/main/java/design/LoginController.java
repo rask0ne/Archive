@@ -67,6 +67,7 @@ public class LoginController {
             if(str.equals("Create new profile")){
                 logger.info("Loggined successfully, user doesn't have profile");
                 UserSingleton.getInstance().setLogin(txtUsername.getText());
+                UserSingleton.getInstance().setProfile(txtUsername.getText());
                 UserSingleton.getInstance().setPassword(password);
                 ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
 

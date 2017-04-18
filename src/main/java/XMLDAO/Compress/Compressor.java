@@ -16,7 +16,7 @@ public class Compressor {
      * method for zipping file with filePath
      * @param filePath the path of file to zipping in zip archive
      * @param archivePath the path of creating archive
-     * @param capacity the capacity of zipping. Borders: [0,9] - > other - default capacity of zipping
+     * @param capacity the capacity of zipping. Borders: [0,9] - other - default capacity of zipping
      */
     public void compress(String filePath, String archivePath, int capacity) {
         try {
@@ -55,7 +55,7 @@ public class Compressor {
 
     /**
      * method for decompress files from zip archive. Unzip all files in archive (without directories). Remove already exist files
-     * @param archivePath the path of zip archive for unzipping. If zipping file is exist -> remove the exist real file
+     * @param archivePath the path of zip archive for unzipping. If zipping file is exist - remove the exist real file
      */
     public void decompress(String archivePath) {
         File file = new File(archivePath);
