@@ -1,7 +1,7 @@
 package XMLDAO.XMLConstants;
 
 /**
- * Created by Alexey on 15.04.2017.
+ * Created by rask on 15.04.2017.
  */
 public class XMLCONST {
     public static final int XMLNONE = 0;

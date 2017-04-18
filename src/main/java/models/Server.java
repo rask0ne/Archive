@@ -9,7 +9,9 @@ import XMLDAO.XMLEditor;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
+import design.Register;
 import hibernate.Util.UsersDataAccessor;
+import org.apache.log4j.Logger;
 import repositories.UserRepository;
 
 import java.io.IOException;
@@ -20,12 +22,19 @@ import java.net.Socket;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by rask on 15.04.2017.
  */
+
+/**
+ * Server model in client-server app
+ */
 public class Server implements Runnable{
+
+    private final Logger logger = Logger.getLogger(Register.class);
 
     ServerSocket listener = new ServerSocket(8000);
     Socket client;
@@ -34,6 +43,9 @@ public class Server implements Runnable{
     public Server() throws IOException, ClassNotFoundException {
     }
 
+    /**
+     * Listening to signals from server
+     */
     public void run() {
 
         while(true){
@@ -53,16 +65,15 @@ public class Server implements Runnable{
         }
     }
 
-    public void sendToClient(Object o) throws IOException {
-
-        this.client = new Socket("",8000);
-
-    }
-
+    /**
+     * Getting object from client, processing it and sending result object back
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public void getFromClient() throws IOException, ClassNotFoundException, SQLException {
 
         System.out.println("In fun");
-        //client = new Socket("",8000);
         ObjectInputStream deserializer = new ObjectInputStream(client.getInputStream());
         Object object = deserializer.readObject();
         System.out.println("Got object");
@@ -73,11 +84,18 @@ public class Server implements Runnable{
 
     }
 
+    /**
+     * Method of process of object
+     * @param o - object server got
+     * @return
+     * @throws SQLException
+     */
     Object checkObject(Object o) throws SQLException {
         if(o instanceof User){
 
             try {
                 System.out.println("instance of user");
+                logger.info("Object is an instance of User class");
                 User user = (User)o;
                 Object obj = actionForUser(user);
                 return obj;
@@ -88,6 +106,7 @@ public class Server implements Runnable{
             }
         }
         if(o instanceof Person){
+            logger.info("Object is an instanse of Person class");
             System.out.println("instance of Person");
             Person person = (Person)o;
             String obj = actionForPerson(person);
@@ -96,25 +115,41 @@ public class Server implements Runnable{
         return o;
     }
 
+    /**
+     * Editing or adding new profile to xml file
+     * @param person
+     * @return
+     */
     private String actionForPerson(Person person) {
 
         int index = xmlEditor.findIndexAsName(person.getName());
         if(index != -1){
             xmlEditor.edit(person, index);
+            logger.info("Profile got edited");
             return "profile edited";
         }
         else {
             xmlEditor.addInEnd(person);
+            logger.info("New profile added");
             return "Profile created successfully";
         }
 
     }
 
+    /**
+     * Getting actions from user object
+     * @param user
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     Object actionForUser(User user) throws SQLException, IOException, ClassNotFoundException {
 
         Connection con;
         Statement stmt;
         System.out.println(user.getAction());
+
         if(user.getAction().equals("Check if registered")) {
 
             con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
@@ -130,7 +165,7 @@ public class Server implements Runnable{
 
                     check = false;
                     String message = "Login is already used";
-
+                    logger.info("Login is used");
                     return message;
 
                 }
@@ -150,6 +185,7 @@ public class Server implements Runnable{
                 preparedStmt.execute();
 
                 String message = "Registered Successfully";
+                logger.info("new user registered");
                 System.out.println("registered");
                 return message;
             }
@@ -168,9 +204,14 @@ public class Server implements Runnable{
 
                 if (user.getLogin().equals(dbUsername) && user.getPassword().equals(dbPassword)) {
 
-                    if(xmlEditor.findIndexAsName(user.getLogin()) == -1)
+                    if(xmlEditor.findIndexAsName(user.getLogin()) == -1) {
+                        logger.info("User need to create new profile");
                         return "Create new profile";
-                    else return "Loggined Successfully";
+                    }
+                    else{
+                        logger.info("Loggined successfully");
+                        return "Loggined Successfully";
+                    }
 
                 }
             }
@@ -189,7 +230,7 @@ public class Server implements Runnable{
 
                 if (user.getLogin().equals(dbUsername) && dbRole.equals("admin")) {
 
-
+                    logger.info("User has rights to open Change Table");
                     String message = "Open Change Table";
 
                     return message;
@@ -202,7 +243,7 @@ public class Server implements Runnable{
 
             con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
             stmt = (Statement) con.createStatement();
-            String query = "SELECT Id, Username, Role FROM users;";
+            String query = "SELECT username, role FROM users;";
             stmt.executeQuery(query);
             ResultSet rs = stmt.getResultSet();
             while (rs.next()) {
@@ -214,6 +255,7 @@ public class Server implements Runnable{
 
                     xmlEditor.setParser(new XMLDOMParser());
                     String message = "DOM setted";
+                    logger.info("DOM parser setted");
 
                     return message;
 
@@ -225,7 +267,7 @@ public class Server implements Runnable{
 
             con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
             stmt = (Statement) con.createStatement();
-            String query = "SELECT Id, Username, Role FROM users;";
+            String query = "SELECT username, role FROM users;";
             stmt.executeQuery(query);
             ResultSet rs = stmt.getResultSet();
             while (rs.next()) {
@@ -237,6 +279,7 @@ public class Server implements Runnable{
 
                     xmlEditor.setParser(new XMLJDOMParser());
                     String message = "JDOM setted";
+                    logger.info("JDOM parser setted");
 
                     return message;
 
@@ -248,7 +291,7 @@ public class Server implements Runnable{
 
             con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
             stmt = (Statement) con.createStatement();
-            String query = "SELECT Id, Username, Role FROM users;";
+            String query = "SELECT id, username, role FROM users;";
             stmt.executeQuery(query);
             ResultSet rs = stmt.getResultSet();
             while (rs.next()) {
@@ -260,6 +303,7 @@ public class Server implements Runnable{
 
                     xmlEditor.setParser(new XMLSAXParser());
                     String message = "SAX setted";
+                    logger.info("SAX parser setted");
 
                     return message;
 
@@ -271,7 +315,7 @@ public class Server implements Runnable{
 
             con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
             stmt = (Statement) con.createStatement();
-            String query = "SELECT Id, Username, Role FROM users;";
+            String query = "SELECT username, role FROM users;";
             stmt.executeQuery(query);
             ResultSet rs = stmt.getResultSet();
             while (rs.next()) {
@@ -283,6 +327,7 @@ public class Server implements Runnable{
 
                     xmlEditor.setParser(new XMLStAXParser());
                     String message = "StAX setted";
+                    logger.info("StAX parser setted");
 
                     return message;
 
@@ -294,7 +339,7 @@ public class Server implements Runnable{
 
             con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
             stmt = (Statement) con.createStatement();
-            String query = "SELECT Id, Username, Role FROM users;";
+            String query = "SELECT username FROM users;";
             stmt.executeQuery(query);
             ResultSet rs = stmt.getResultSet();
             while (rs.next()) {
@@ -309,7 +354,8 @@ public class Server implements Runnable{
                     preparedStmt.setString (1, user.getRole());
                     preparedStmt.setString (2, user.getLogin());
                     preparedStmt.execute();
-                    String message = "Changed to admin. Welcome!";
+                    logger.info("User changed to admin");
+
                     UsersDataAccessor access = new UsersDataAccessor("jdbc:mysql://localhost:3306/archive?useSSL=false", "root", "root");
 
                     return access.getFileList();
@@ -322,13 +368,12 @@ public class Server implements Runnable{
 
             con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
             stmt = (Statement) con.createStatement();
-            String query = "SELECT Id, Username, Role FROM users;";
+            String query = "SELECT username FROM users;";
             stmt.executeQuery(query);
             ResultSet rs = stmt.getResultSet();
             while (rs.next()) {
 
                 String dbUsername = rs.getString("username");
-                String dbRole = rs.getString("role");
 
                 if (user.getLogin().equals(dbUsername)) {
 
@@ -338,7 +383,7 @@ public class Server implements Runnable{
                     preparedStmt.setString (1, user.getRole());
                     preparedStmt.setString (2, user.getLogin());
                     preparedStmt.execute();
-                    String message = "Changed to user. Welcome!";
+                    logger.info("User changed to user");
 
                     UsersDataAccessor access = new UsersDataAccessor("jdbc:mysql://localhost:3306/archive?useSSL=false", "root", "root");
 
@@ -352,15 +397,25 @@ public class Server implements Runnable{
 
             System.out.println("Update Users");
             UsersDataAccessor access = new UsersDataAccessor("jdbc:mysql://localhost:3306/archive?useSSL=false", "root", "root");
-
+            logger.info("updating profiles");
             return access.getFileList();
         }
         if(user.getAction().equals("Get Profiles")){
-            return xmlEditor.getList();
+            //xmlEditor.uncompress();
+            //xmlEditor.validate("archive.xml");
+            ArrayList<Person> list = xmlEditor.getList();
+            //xmlEditor.compress(1);
+            logger.info("Getting all profiles");
+            return list;
         }
         if(user.getAction().equals("Show user profile")){
 
-            return xmlEditor.get(xmlEditor.findIndexAsName(user.getUserProfile()));
+            //xmlEditor.uncompress();
+           // xmlEditor.validate("archive.xml");
+            logger.info("Getting one profile");
+            Person person = xmlEditor.get(xmlEditor.findIndexAsName(user.getUserProfile()));
+            //xmlEditor.compress(1);
+            return person;
         }
         if(user.getAction().equals("Change user profile")) {
             con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
@@ -375,7 +430,7 @@ public class Server implements Runnable{
 
                 if (user.getLogin().equals(user.getUserProfile()) || (user.getLogin().equals(dbUsername)
                         && dbRole.equals("admin"))) {
-
+                    logger.info("Server accepted change of profile");
                     String message = "You have rights";
                     return message;
                 }
@@ -385,7 +440,7 @@ public class Server implements Runnable{
         if(user.getAction().equals("Delete user profile")) {
             con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/archive", "root", "root");
             stmt = (Statement) con.createStatement();
-            String query = "SELECT Username, Role FROM users;";
+            String query = "SELECT username, role FROM users;";
             stmt.executeQuery(query);
             ResultSet rs = stmt.getResultSet();
             while (rs.next()) {
@@ -396,7 +451,12 @@ public class Server implements Runnable{
                 if (user.getLogin().equals(user.getUserProfile()) || (user.getLogin().equals(dbUsername)
                         && dbRole.equals("admin"))) {
 
+                    //xmlEditor.uncompress();
+                   // xmlEditor.validate("archive.xml");
                     xmlEditor.delete(xmlEditor.findIndexAsName(user.getUserProfile()));
+                    logger.info("User profile got deleted");
+                    //xmlEditor.validate("archive.xml");
+                    //xmlEditor.compress(1);
                     String message = "deleted";
                     return message;
                 }

@@ -6,6 +6,10 @@ import javafx.beans.property.StringProperty;
 /**
  * Created by rask on 17.04.2017.
  */
+
+/**
+ * Repository of profiles for table in main window of the archive
+ */
 public class XMLRepository {
 
     private final StringProperty username = new SimpleStringProperty(this, "username");

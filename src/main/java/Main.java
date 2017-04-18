@@ -9,6 +9,10 @@ import models.Server;
 /**
  * Created by rask on 16.04.2017.
  */
+
+/**
+ * Starting server
+ */
 public class Main{
 
       public static void main(String[] args) throws Exception {

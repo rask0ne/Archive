@@ -10,6 +10,10 @@ import static javafx.application.Application.launch;
 /**
  * Created by rask on 16.04.2017.
  */
+
+/**
+ * Profile logic
+ */
 public class Profile {
 
     public void start(Stage primaryStage) throws Exception{

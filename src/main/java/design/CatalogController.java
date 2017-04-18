@@ -90,25 +90,6 @@ public class CatalogController {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public void searchAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-
-        String text = srchText.getText();
-
-       // updateTableView(text);
-
-    }
-
-
-
-    /**
-     * Algorithm of deleting file from database by its name and username, who uploaded this file.
-     * Also there is a user role check, because admin has rights to delete all files, user
-     * may delete only his files, guest has not such rights.
-     * @param actionEvent
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     */
-
 
     /**
      * Method to refresh data in table after some manipulations with files database. Works
@@ -146,14 +127,6 @@ public class CatalogController {
     }
 
     /**
-     * Overloaded method to refresh data after searching for some files. Gets string and then
-     * forms list according to this inquiry.
-     * @param name
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     */
-
-    /**
      * Button to change current user. Creates window 'Login'.
      * @param actionEvent
      * @throws IOException
@@ -173,40 +146,74 @@ public class CatalogController {
 
     }
 
+    /**
+     * Method to change type of parser to DOM
+     * @param actionEvent
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void getDOM(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
 
         User user = new User(UserSingleton.getInstance().getLogin(), "", "");
         user.setAction("Get DOM parser");
         Client client = new Client();
+        logger.info("Trying to change parser to DOM");
         String str = (String)client.sendToServer(user);
 
     }
 
+    /**
+     * Method to change type of parser to JDOM
+     * @param actionEvent
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void getJDOM(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
 
         User user = new User(UserSingleton.getInstance().getLogin(), "", "");
         user.setAction("Get JDOM parser");
         Client client = new Client();
+        logger.info("Trying to change parser to JDOM");
         String str = (String)client.sendToServer(user);
 
     }
 
+    /**
+     * Method to change type of parser to SAX
+     * @param actionEvent
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void getSAX(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
 
         User user = new User(UserSingleton.getInstance().getLogin(), "", "");
         user.setAction("Get SAX parser");
         Client client = new Client();
+        logger.info("Trying to change parser to SAX");
         String str = (String)client.sendToServer(user);
     }
 
+    /**
+     * Method to change type of parser to StAX
+     * @param actionEvent
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void getStAX(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
 
         User user = new User(UserSingleton.getInstance().getLogin(), "", "");
         user.setAction("Get StAX parser");
         Client client = new Client();
+        logger.info("Trying to change parser to StAX");
         String str = (String)client.sendToServer(user);
     }
 
+    /**
+     * Method to change roles of registered users of archive.
+     * @param actionEvent
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void changeRolesButton(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
 
         User user = new User(UserSingleton.getInstance().getLogin(), "", "");
@@ -216,13 +223,15 @@ public class CatalogController {
         user.setAction("Change Roles");
 
         Client client = new Client();
+        logger.info("Trying to get access to ChangeRoles menu");
         Object o = client.sendToServer(user);
 
         if(o instanceof String){
             String str = (String)o;
             if(str.equals("Open Change Table")){
 
-                //((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+                logger.info("Got access to ChangeRoles menu");
+
                 Parent parent = FXMLLoader.load(getClass().getResource("ChangeRoles.fxml"));
                 Stage stage = new Stage();
                 Scene scene = new Scene(parent);
@@ -235,6 +244,12 @@ public class CatalogController {
 
     }
 
+    /**
+     * Getting String format of node of xml file
+     * @param actionEvent
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void showProfileButton(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
 
         XMLRepository xml = (XMLRepository) tableView.getSelectionModel().getSelectedItem();
@@ -244,9 +259,11 @@ public class CatalogController {
         user.setUserProfile(xml.getUsername());
 
         Client client = new Client();
+        logger.info("Trying to get profile");
         Person profile =  (Person)client.sendToServer(user);
         UserSingleton.getInstance().setProfile(profile.toString());
 
+        logger.info("Got profile");
         Parent parent = FXMLLoader.load(getClass().getResource("ShowProfile.fxml"));
         Stage stage = new Stage();
         Scene scene = new Scene(parent);
@@ -256,7 +273,13 @@ public class CatalogController {
 
     }
 
-
+    /**
+     * Only for admins. Changing profile of registered user
+     * @param actionEvent
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public void changeProfileAction(ActionEvent actionEvent) throws IOException, ClassNotFoundException, SQLException {
 
         XMLRepository xml = (XMLRepository) tableView.getSelectionModel().getSelectedItem();
@@ -267,10 +290,12 @@ public class CatalogController {
         UserSingleton.getInstance().setProfile(xml.getUsername());
 
         Client client = new Client();
+        logger.info("Trying to get access to change profile");
         String str =  (String)client.sendToServer(user);
 
         if(str.equals("You have rights")) {
 
+            logger.info("Got access to change profiles");
             System.out.println("Ok");
             Parent parent = FXMLLoader.load(getClass().getResource("Profile.fxml"));
             Stage stage = new Stage();
@@ -282,7 +307,13 @@ public class CatalogController {
 
     }
 
-
+    /**
+     * Only for admins. Also users may delete their own profiles
+     * @param actionEvent
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public void deleteProfileAction(ActionEvent actionEvent) throws IOException, ClassNotFoundException, SQLException {
 
         XMLRepository xml = (XMLRepository) tableView.getSelectionModel().getSelectedItem();
@@ -293,9 +324,11 @@ public class CatalogController {
         UserSingleton.getInstance().setProfile(xml.getUsername());
 
         Client client = new Client();
+        logger.info("Trying to get access to delete profile");
         String str =  (String)client.sendToServer(user);
 
         if(str.equals("deleted")){
+            logger.info("Got access to delete profile");
             updateTableView();
         }
 

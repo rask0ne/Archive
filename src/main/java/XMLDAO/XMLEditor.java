@@ -15,7 +15,7 @@ import static XMLDAO.XMLConstants.XMLPARSERCONST.XMLNONE;
 
 
 /**
- * Created by Alexey on 15.04.2017.
+ * Created by rask on 15.04.2017.
  * The class for doing logic operations with XML file and Person
  */
 public class XMLEditor {

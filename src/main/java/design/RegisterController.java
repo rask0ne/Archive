@@ -41,6 +41,8 @@ import static java.lang.Thread.sleep;
  */
 public class RegisterController{
 
+    private final Logger logger = Logger.getLogger(Login.class);
+
     @FXML
     private Label lblMessage;
     @FXML
@@ -48,12 +50,11 @@ public class RegisterController{
     @FXML
     private PasswordField txtPassword;
 
-    public void passwordTextButtonAction(ActionEvent actionEvent) {
-    }
-
-    public void usernameTextButtonAction(ActionEvent actionEvent) {
-    }
-
+    /**
+     * Registrering new user in archive
+     * @param actionEvent
+     * @throws Exception
+     */
     public void registerButtonAction(ActionEvent actionEvent) throws Exception{
 
         boolean check = true;
@@ -67,12 +68,14 @@ public class RegisterController{
         user.setAction("Check if registered");
         Client client = new Client();
         System.out.println("sent to server");
+        logger.info("Requesting to register new user");
         Object o = client.sendToServer(user);
 
         System.out.println("Got signal");
         if(o instanceof String){
             String str = (String)o;
             if(str.equals("Registered Successfully")){
+                logger.info("New user registered");
                 UserSingleton.getInstance().setLogin(txtUsername.getText());
                 UserSingleton.getInstance().setPassword(password);
                 ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
@@ -85,6 +88,7 @@ public class RegisterController{
                 stage.show();
             }
             lblMessage.setText("This username already exists!");
+
         }
 
     }

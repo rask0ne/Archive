@@ -10,6 +10,10 @@ import java.sql.DriverManager;
 /**
  * Created by rask on 17.04.2017.
  */
+
+/**
+ * Repository for table of users in ChangeRoles.fxml
+ */
 public class UserRepository implements Serializable{
 
     private String username;

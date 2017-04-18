@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * Created by Alexey on 15.04.2017.
+ * Created by rask on 15.04.2017.
  * The DOM parser for XML file. Uses as tool in XMLEditor
  */
 public class XMLDOMParser implements Parserable {

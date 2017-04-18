@@ -1,0 +1,59 @@
+
+
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="firstname" type="xs:string"/>
+    <xs:element name="lastname" type="xs:string"/>
+    <xs:element name="telephonenumber" type="xs:string"/>
+    <xs:element name="mail" type="xs:string"/>
+    <xs:element name="workplace">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="BSUIR"/>
+                <xs:enumeration value="NONE"/>
+                <xs:enumeration value="EPAM"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="experience" type="xs:byte"/>
+    <xs:element name="FIO">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="firstname"/>
+                <xs:element ref="lastname"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="contact">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="telephonenumber"/>
+                <xs:element ref="mail"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="work">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="workplace"/>
+                <xs:element ref="experience"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="user">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="FIO"/>
+                <xs:element ref="contact"/>
+                <xs:element ref="work"/>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="name" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="class">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="user" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

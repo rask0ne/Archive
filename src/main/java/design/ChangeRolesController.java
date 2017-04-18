@@ -10,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import models.Client;
 import models.User;
 import models.UserSingleton;
+import org.apache.log4j.Logger;
 import repositories.UserRepository;
 
 import java.io.IOException;
@@ -21,11 +22,22 @@ import java.util.List;
 /**
  * Created by rask on 17.04.2017.
  */
+
+/**
+ * Controller of ChangeRoles.fxml
+ */
 public class ChangeRolesController {
 
+    private final Logger logger = Logger.getLogger(Login.class);
     @FXML
     private TableView<UserRepository> tableView;
 
+    /**
+     * Initializing table with all users registered in DB
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
     public void initialize() throws SQLException, ClassNotFoundException, IOException {
 
         TableColumn<UserRepository, String> firstNameCol = new TableColumn<>("User");
@@ -42,9 +54,17 @@ public class ChangeRolesController {
         Client client = new Client();
         ArrayList<UserRepository> list = (ArrayList<UserRepository>)client.sendToServer(user);
         tableView.getItems().addAll(list);
+        logger.info("Table of users initialized");
 
     }
 
+    /**
+     * Setting user from table as an admin
+     * @param actionEvent
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public void setAsAdmin(ActionEvent actionEvent) throws IOException, ClassNotFoundException, SQLException {
 
         UserRepository file = (UserRepository) tableView.getSelectionModel().getSelectedItem();
@@ -65,9 +85,17 @@ public class ChangeRolesController {
             tableView.getColumns().addAll(firstNameCol, usernameCol);
 
         tableView.getItems().addAll(list);
+        logger.info("User " + file.getUsername() + " became an admin");
 
     }
 
+    /**
+     * Setting user from a table as a user
+     * @param actionEvent
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public void setAsUser(ActionEvent actionEvent) throws IOException, ClassNotFoundException, SQLException {
 
         UserRepository file = (UserRepository) tableView.getSelectionModel().getSelectedItem();
@@ -88,7 +116,7 @@ public class ChangeRolesController {
             tableView.getColumns().addAll(firstNameCol, usernameCol);
 
         tableView.getItems().addAll(list);
-
+        logger.info("User " + file.getUsername() + " became a user");
     }
 
 }

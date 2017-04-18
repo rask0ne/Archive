@@ -2,6 +2,8 @@ package hibernate.Util;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
+import design.Register;
+import org.apache.log4j.Logger;
 import repositories.UserRepository;
 
 import java.io.Serializable;
@@ -15,8 +17,13 @@ import java.util.List;
 /**
  * Created by rask on 17.04.2017.
  */
+
+/**
+ * Connector between database of users and GUI interface. Gets a list of current users
+ */
 public class UsersDataAccessor implements Serializable{
 
+    private final Logger logger = Logger.getLogger(Register.class);
     private Connection connection ;
 
 
@@ -28,9 +35,19 @@ public class UsersDataAccessor implements Serializable{
      * @throws SQLException
      * @throws ClassNotFoundException
      */
+    /**
+     * Connecing to the database
+     * @param dbURL adress
+     * @param user login
+     * @param password password
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public UsersDataAccessor(String dbURL, String user, String password) throws SQLException, ClassNotFoundException, SQLException {
         //Class.forName(driverClassName);
         connection = (Connection) DriverManager.getConnection(dbURL, user, password);
+        logger.info("Connected to the database from UserDataAccessor");
 
     }
 
@@ -45,7 +62,7 @@ public class UsersDataAccessor implements Serializable{
     }
 
     /**
-     * Creating list of all files to import it into table in 'Catalog' window.
+     * Creating list of all files to import it into table in 'ChangeRoles' window.
      *
      * @return list of files to integrate.
      * @throws SQLException
@@ -62,7 +79,7 @@ public class UsersDataAccessor implements Serializable{
                 UserRepository file = new UserRepository(username, role);
                 filesList.add(file);
             }
-
+            logger.info("Returning list of users");
             return filesList ;
         }
     }

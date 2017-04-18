@@ -1,7 +1,7 @@
 package XMLDAO.XMLConstants;
 
 /**
- * Created by Alexey on 15.04.2017.
+ * Created by rask on 15.04.2017.
  * Class with Constants for transform Person into XML format
  */
 public class XMLPARSERCONST{

@@ -3,6 +3,10 @@ package models;
 /**
  * Created by rask on 17.04.2017.
  */
+
+/**
+ * Client singleton. Stores the most important information about user and his actions to server
+ */
 public class UserSingleton {
 
     private static UserSingleton instance = null;

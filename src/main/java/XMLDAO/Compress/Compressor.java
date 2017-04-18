@@ -7,7 +7,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Created by Alexey on 16.04.2017.
+ * Created by rask on 16.04.2017.
  * Class for create ZIP archive and unZIP archive
  */
 public class Compressor {

@@ -6,7 +6,7 @@ import static XMLDAO.XMLConstants.XMLPARSERCONST.*;
 
 
 /**
- * Created by Alexey on 03.04.2017.
+ * Created by rask on 07.04.2017.
  * Class of user, that was saving in the XML file on Server
  */
 public class Person implements Serializable {

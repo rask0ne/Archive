@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 /**
- * Created by Alexey on 16.04.2017.
+ * Created by rask on 16.04.2017.
  * The class for checking validation of XML file with XML schema
  */
 public class XMLSchemaValidator {

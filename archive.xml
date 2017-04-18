@@ -10,7 +10,7 @@
       <mail>dsf@gmail.com</mail>
     </contact>
     <work>
-      <workplace>fdsf</workplace>
+      <workplace>BSUIR</workplace>
       <experience>1</experience>
     </work>
   </user>
@@ -24,7 +24,7 @@
       <mail>fdsf@gmail.com</mail>
     </contact>
     <work>
-      <workplace>fdsf</workplace>
+      <workplace>NONE</workplace>
       <experience>2</experience>
     </work>
   </user>
@@ -38,8 +38,36 @@
       <mail>fdsf@gmail.com</mail>
     </contact>
     <work>
-      <workplace>fdsff</workplace>
+      <workplace>BSUIR</workplace>
       <experience>121</experience>
+    </work>
+  </user>
+  <user name="Alex">
+    <FIO>
+      <firstname>fdsfsf</firstname>
+      <lastname>sfdsf</lastname>
+    </FIO>
+    <contact>
+      <telephonenumber>+32131</telephonenumber>
+      <mail>fdfs@gmail.com</mail>
+    </contact>
+    <work>
+      <workplace>EPAM</workplace>
+      <experience>2</experience>
+    </work>
+  </user>
+  <user name="admin">
+    <FIO>
+      <firstname>fdsfs</firstname>
+      <lastname>dsfsdf</lastname>
+    </FIO>
+    <contact>
+      <telephonenumber>+3213123</telephonenumber>
+      <mail>fsdf@gmail.com</mail>
+    </contact>
+    <work>
+      <workplace>BSUIR</workplace>
+      <experience>2</experience>
     </work>
   </user>
 </class>

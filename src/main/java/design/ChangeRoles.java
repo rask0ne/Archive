@@ -12,6 +12,10 @@ import static javafx.application.Application.launch;
 /**
  * Created by rask on 17.04.2017.
  */
+
+/**
+ * Logic of ChangeRoles window
+ */
 public class ChangeRoles extends Application{
 
     private final Logger logger = Logger.getLogger(Login.class);
@@ -24,7 +28,7 @@ public class ChangeRoles extends Application{
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
 
-        logger.info("Window 'Login' created");
+        logger.info("Window 'ChangeRoles' created");
     }
 
 

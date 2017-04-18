@@ -25,13 +25,13 @@ public class Catalog extends Application {
         primaryStage.setTitle("Catalog");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-        logger.info("Window 'Catalog' created");
+        logger.info("Window 'Archive' created");
 
     }
 
     public Catalog(Stage stage) throws Exception {
 
-        //lblMessage.setText(UserRepository.getInstance().getName());
+
         start(stage);
 
     }
